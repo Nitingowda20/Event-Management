@@ -4,7 +4,6 @@ import axios from "axios";
 
 const API_URL = "http://localhost:1234/api/users"; // Fetch from .env file or fallback to localhost
 
-
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -51,7 +50,7 @@ const Login = () => {
   return (
     <div style={styles.container}>
       <div style={styles.formContainer}>
-        <h2 style={styles.header}>Login to Event Management</h2>
+        <h2 style={styles.header}>Login </h2>
         {error && <p style={styles.error}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div style={styles.formGroup}>
@@ -95,18 +94,20 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    width:"212vh",
-    height: "100vh",
+    minHeight: "100vh", // Ensure it takes the full height of the viewport
+    width: "100vw", // Ensure it takes the full width of the viewport
     backgroundColor: "#f0f0f0",
-    margin: 0,
   },
   formContainer: {
-    width: "100%",
-    maxWidth: "400px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "15px",
     padding: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "10px",
-    backgroundColor: "#fff",
+    width: "100%",
+    maxWidth: "350px",
+    backgroundColor: "white",
+    borderRadius: "8px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
   },
   header: {
     textAlign: "center",
@@ -133,9 +134,9 @@ const styles = {
     cursor: "pointer",
     width: "100%",
   },
-  buttonView :{
+  buttonView: {
     padding: "10px",
-    marginTop : "10px",
+    marginTop: "10px",
     backgroundColor: "blue",
     color: "white",
     border: "none",
