@@ -52,3 +52,19 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ message: "Server Error: " + error.message });
   }
 };
+
+
+//Guest login
+export const guestLogin = async(req , res) => { 
+  try {
+    const token = jwt.sign({ role: "guest" }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    res.status(200).json({
+      message: "Guest login Success",
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error: " + error.message });
+  }
+}

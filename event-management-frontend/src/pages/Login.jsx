@@ -38,7 +38,16 @@ const Login = () => {
       );
     }
   };
-
+  const handleGuestLogin = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/guest-login`);
+      const { token } = response.data;
+      localStorage.setItem("token", token);
+      navigate("/guest-dashboard");
+    } catch (error) {
+      console.error("Guest login failed", error);
+    }
+  };
   return (
     <div style={styles.container}>
       <div style={styles.formContainer}>
@@ -68,6 +77,7 @@ const Login = () => {
           <button type="submit" style={styles.button}>
             Login
           </button>
+          <button onClick={handleGuestLogin}>Login as Guest</button>
         </form>
         <p style={styles.registerText}>
           Don't have an account?{" "}
@@ -117,6 +127,16 @@ const styles = {
   button: {
     padding: "10px",
     backgroundColor: "#4CAF50",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    width: "100%",
+  },
+  buttonView :{
+    padding: "10px",
+    marginTop : "10px",
+    backgroundColor: "blue",
     color: "white",
     border: "none",
     borderRadius: "5px",
