@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from 'axios';
 
 const EventCreation = () => {
   const [name, setName] = useState("");
@@ -15,6 +16,7 @@ const EventCreation = () => {
     setImage(e.target.files[0]); // Store the file for upload
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -26,13 +28,13 @@ const EventCreation = () => {
     // Create FormData to send image to Cloudinary directly
     const formData = new FormData();
     formData.append("file", image); // Attach the file
-    formData.append("upload_preset", "your_upload_preset"); // Replace with your Cloudinary upload preset
-    formData.append("cloud_name", "your_cloud_name"); // Replace with your Cloudinary cloud name
+    formData.append("upload_preset", "event_preset"); // Replace with your Cloudinary upload preset
+    formData.append("cloud_name", "dgwhwdlyo"); 
 
     try {
       // Upload image to Cloudinary
       const response = await axios.post(
-        "https://api.cloudinary.com/v1_1/your_cloud_name/image/upload",
+        "https://api.cloudinary.com/v1_1/dgwhwdlyo/image/upload",
         formData
       );
 
@@ -72,18 +74,52 @@ const EventCreation = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh", // Ensure it takes the full height of the viewport
-        width: "100vw", // Ensure it takes the full width of the viewport
-        backgroundColor: "#f0f0f0", // Light background color for contrast
+        minHeight: "100vh",
+        width: "100vw",
+        backgroundImage:
+          "url('https://4kwallpapers.com/images/walls/thumbs_2t/12523.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
+      {/* left */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          margin: "10px",
+          padding: "10px",
+          minHeight: "100vh", // Ensure it takes the full height of the viewport
+          width: "40vw", // Ensure it takes the full width of the viewport
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "34px",
+            padding: "10px",
+            margin: "20px",
+            textAlign: "center",
+            color: "black",
+          }}
+        >
+          Join us for an engaging event where innovation meets learning! Connect
+          with experts, enhance your skills, and explore new trends in a dynamic
+          setting. Don't miss this opportunity to grow and network!
+        </h1>
+      </div>
+
+      {/* right */}
       <form
         onSubmit={handleSubmit}
         style={{
           display: "flex",
           flexDirection: "column",
+          margin: "10px",
           gap: "15px",
           padding: "20px",
+          height: "auto",
           width: "100%",
           maxWidth: "450px",
           backgroundColor: "white",
@@ -91,9 +127,18 @@ const EventCreation = () => {
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
         }}
       >
-          <h1 className="text-center text-3xl my-7 font-semibold">
-            Create a Event
-          </h1>
+        <h1
+          className="text-center text-3xl my-7 font-semibold"
+          style={{
+            fontSize: "54px",
+            fontFamily: "sans-serif",
+            padding: "10px",
+            margin: "20px",
+            textAlign: "center",
+          }}
+        >
+          Create a Event
+        </h1>
         <input
           type="text"
           value={name}

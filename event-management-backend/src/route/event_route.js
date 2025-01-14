@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/create", createEventController);
 
 //   to get all events
-router.get("/", getAllEventsController);
+router.get("/getallevent", getAllEventsController);
 
 //   to get an event by ID
 router.get("/:id", getEventByIdController);
