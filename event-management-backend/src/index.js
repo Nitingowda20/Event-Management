@@ -16,7 +16,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://event-management-nitin.onrender.com", // Allow frontend origin
+    origin: "https://event-management-nitin.onrender.com", 
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -25,10 +25,11 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://event-management-e9oz.onrender.com",
+    origin: "https://event-management-nitin.onrender.com", 
     credentials: true,
   })
 );
+
 
 let eventAttendees = {};
 
