@@ -105,7 +105,7 @@ const ShowMoreButton = styled.button`
   }
 `;
 
-const API_URL = "http://localhost:1234";
+const API_URL = "https://event-management-e9oz.onrender.com";
 
 export default function EventSearch() {
   const [sidebarData, setSidebarData] = useState({
@@ -139,7 +139,7 @@ export default function EventSearch() {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:1234/api/events/searchevent`,
+          `https://event-management-e9oz.onrender.com/api/events/searchevent`,
           {
             params: {
               searchTerm: urlParams.get("searchTerm"),
@@ -190,7 +190,7 @@ export default function EventSearch() {
   const handleShowMore = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:1234/api/events/searchevent`,
+        `https://event-management-e9oz.onrender.com/api/events/searchevent`,
         {
           params: {
             ...sidebarData,

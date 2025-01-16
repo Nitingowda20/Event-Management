@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
-const API_URL = "http://localhost:1234/api/users";
+const API_URL = "https://event-management-e9oz.onrender.com/api/users";
 
 const Register = () => {
   const [username, setUsername] = useState("");

@@ -4,7 +4,7 @@ import EventCard from "../components/EventCard";
 import styled from "styled-components";
 
 export default function Dashboard() {
-  const API_URL = "http://localhost:1234";
+  const API_URL = "https://event-management-e9oz.onrender.com";
 
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);

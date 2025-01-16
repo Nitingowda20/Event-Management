@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
-const API_URL = "http://localhost:1234/api/users"; // Fetch from .env file or fallback to localhost
+const API_URL = "https://event-management-e9oz.onrender.com/api/users"; // Fetch from .env file or fallback to localhost
 
 const Login = () => {
   const [username, setUsername] = useState("");

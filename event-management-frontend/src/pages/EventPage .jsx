@@ -13,7 +13,7 @@ const EventPage = () => {
 
   useEffect(() => {
     // Create socket connection
-    socket = io("http://localhost:1234");
+    socket = io("https://event-management-e9oz.onrender.com");
 
     // Listen for attendee count update
     socket.on("attendeeUpdated", (newAttendeeCount) => {
@@ -23,7 +23,7 @@ const EventPage = () => {
     // Fetch event details
     const fetchEventDetails = async () => {
       const response = await fetch(
-        `http://localhost:1234/api/events/${eventId}`
+        `https://event-management-e9oz.onrender.com/api/events/${eventId}`
       );
       const data = await response.json();
       setEventDetails(data);
@@ -44,7 +44,7 @@ const EventPage = () => {
     }
 
     const response = await fetch(
-      `http://localhost:1234/api/events/${eventId}/join`,
+      `https://event-management-e9oz.onrender.com/api/events/${eventId}/join`,
       {
         method: "POST",
       }

@@ -56,7 +56,7 @@ const EventCreation = () => {
 
       // Submit event data to your backend
       const backendResponse = await axios.post(
-        "http://localhost:1234/api/events/create",
+        "https://event-management-e9oz.onrender.com/api/events/create",
         eventData
       );
 
@@ -78,7 +78,7 @@ const EventCreation = () => {
   useEffect(() => {
     if (!eventId) return; // Only connect once event is created
 
-    const socket = io("http://localhost:1234");
+    const socket = io("https://event-management-e9oz.onrender.com");
 
     // Join the event room using eventId
     socket.emit("joinEvent", eventId);
