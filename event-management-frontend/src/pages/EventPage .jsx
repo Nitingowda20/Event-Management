@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import io from "socket.io-client";
+
+let socket;
 
 const EventPage = () => {
   const { eventId } = useParams();
@@ -9,17 +12,29 @@ const EventPage = () => {
   const [joined, setJoined] = useState(false);
 
   useEffect(() => {
+    // Create socket connection
+    socket = io("http://localhost:1234");
+
+    // Listen for attendee count update
+    socket.on("attendeeUpdated", (newAttendeeCount) => {
+      setAttendees(newAttendeeCount);
+    });
+
+    // Fetch event details
     const fetchEventDetails = async () => {
       const response = await fetch(
         `http://localhost:1234/api/events/${eventId}`
       );
       const data = await response.json();
-      console.log("Fetched event data:", data);
       setEventDetails(data);
-      setAttendeesCount(data.attendeesCount || 0);
+      setAttendeesCount(data.attendees || 0);
     };
 
     fetchEventDetails();
+
+    return () => {
+      socket.disconnect(); // Cleanup socket on component unmount
+    };
   }, [eventId]);
 
   const handleJoinEvent = async () => {
@@ -37,8 +52,8 @@ const EventPage = () => {
 
     if (response.ok) {
       setJoined(true);
-      setAttendeesCount(attendeesCount + 1);
       alert("You have successfully joined the event!");
+      setAttendeesCount((prevCount) => prevCount + 1);
     } else {
       alert("Failed to join the event. Please try again.");
     }
@@ -80,7 +95,7 @@ const EventPage = () => {
             <AttendeesSection>
               <h3>Attendees</h3>
               <p>
-                {attendeesCount} / {eventDetails.maxAttendees} people joined
+                {attendeesCount} / {eventDetails.maxAttendees}
               </p>
               {!joined && (
                 <button onClick={handleJoinEvent} className="join-btn">
@@ -107,11 +122,21 @@ const EventPageWrapper = styled.div`
 
 const EventImage = styled.div`
   width: 100%;
-  height: 50vh;
+  max-height: 50vh; /* Ensure it doesn't grow beyond 50% of viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   img {
     width: 100%;
-    height: 100%;
+    height: auto; /* Maintain aspect ratio */
     object-fit: cover;
+    object-position: center; /* Center image */
+    border-bottom: 4px solid #4fd1c5; /* Optional: Adding style */
+  }
+
+  @media (max-width: 768px) {
+    max-height: 40vh; /* Adjust height for smaller screens */
   }
 `;
 

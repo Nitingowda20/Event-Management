@@ -80,10 +80,13 @@ const DashboardWrapper = styled.div`
 
 const Header = styled.div`
   text-align: center;
-  font-size: 3xl;
+  font-size: 1.5rem; /* Default for smaller devices */
   font-weight: bold;
+  @media (min-width: 768px) {
+    font-size: 2.5rem;
+  }
   @media (min-width: 1024px) {
-    font-size: 6xl;
+    font-size: 3.5rem;
   }
 `;
 
@@ -132,8 +135,14 @@ const EventsGrid = styled.div`
   gap: 6px;
   text-align: center;
   h2 {
-    font-size: 2xl;
+    font-size: 1.5rem;
     font-weight: 600;
+    @media (min-width: 768px) {
+      font-size: 2rem;
+    }
+    @media (min-width: 1024px) {
+      font-size: 2.5rem;
+    }
   }
 `;
 

@@ -4,7 +4,6 @@ import {
   deleteEventController,
   getAllEventsController,
   getEventByIdController,
-  joinEventController,
   searchEventsController,
   updateEventController,
 } from "../controller/event_controller.js";
@@ -27,6 +26,7 @@ router.put("/:id", updateEventController);
 //   to delete an event
 router.delete("/:id", deleteEventController);
 
-router.post("/:eventId/join", joinEventController);
+// router.post("/:eventId/join", joinEventController);
+
 
 export default router;

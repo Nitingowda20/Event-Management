@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
 
 const API_URL = "http://localhost:1234/api/users";
 
@@ -38,112 +39,103 @@ const Register = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.formContainer}>
-        <h2 style={styles.header}>Register</h2>
-        {error && <p style={styles.error}>{error}</p>}
+    <Container>
+      <FormContainer>
+        <h2>Register</h2>
+        {error && <Error>{error}</Error>}
         <form onSubmit={handleSubmit}>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Username:</label>
-            <input
+          <FormGroup>
+            <label>Username:</label>
+            <Input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
-              style={styles.input}
             />
-          </div>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Email:</label>
-            <input
+          </FormGroup>
+          <FormGroup>
+            <label>Email:</label>
+            <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              style={styles.input}
             />
-          </div>
-          <div style={styles.formGroup}>
-            <label style={styles.label}>Password:</label>
-            <input
+          </FormGroup>
+          <FormGroup>
+            <label>Password:</label>
+            <Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              style={styles.input}
             />
-          </div>
-          <button type="submit" style={styles.button}>
-            Register
-          </button>
+          </FormGroup>
+          <Button type="submit">Register</Button>
         </form>
-        <p style={styles.registerText}>
-          Already have an account?{" "}
-          <a href="/login" style={styles.registerLink}>
-            Login here
-          </a>
-        </p>
-      </div>
-    </div>
+        <RegisterText>
+          Already have an account? <a href="/login">Login here</a>
+        </RegisterText>
+      </FormContainer>
+    </Container>
   );
 };
 
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "100vh", // Ensure it takes the full height of the viewport
-    width: "100vw", // Ensure it takes the full width of the viewport
-    backgroundColor: "#f0f0f0",
-  },
-  formContainer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "15px",
-    padding: "20px",
-    width: "100%",
-    maxWidth: "350px",
-    backgroundColor: "white",
-    borderRadius: "8px",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-  },
-  header: {
-    textAlign: "center",
-  },
-  formGroup: {
-    marginBottom: "15px",
-  },
-  label: {
-    marginBottom: "5px",
-  },
-  input: {
-    padding: "7px",
-    fontSize: "16px",
-    width: "95%",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-  },
-  button: {
-    padding: "10px",
-    backgroundColor: "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    width: "100%",
-  },
-  error: {
-    color: "red",
-    textAlign: "center",
-  },
-  registerText: {
-    textAlign: "center",
-  },
-  registerLink: {
-    color: "#4CAF50",
-    textDecoration: "none",
-  },
-};
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #f0f0f0;
+`;
+
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  width: 100%;
+  max-width: 350px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 15px;
+`;
+
+const Input = styled.input`
+  padding: 7px;
+  font-size: 16px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+`;
+
+const Button = styled.button`
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+`;
+
+const Error = styled.p`
+  color: red;
+  text-align: center;
+`;
+
+const RegisterText = styled.p`
+  text-align: center;
+  font-size: 0.9rem;
+  a {
+    color: #4caf50;
+    text-decoration: none;
+  }
+`;
 
 export default Register;

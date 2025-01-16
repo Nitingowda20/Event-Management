@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { io } from "socket.io-client"; // Importing socket.io
+import { io } from "socket.io-client";
+import styled from "styled-components";
 
 const EventCreation = () => {
   const [name, setName] = useState("");
@@ -68,6 +69,7 @@ const EventCreation = () => {
       alert("Error creating event");
     }
   };
+
   const handleCategoryChange = (e) => {
     setCategory(e.target.value);
   };
@@ -91,217 +93,218 @@ const EventCreation = () => {
       socket.disconnect();
       socket.off("updateAttendees");
     };
-  }, [eventId]); // Re-run when eventId changes
+  }, [eventId]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        width: "100vw",
-        // backgroundImage:
-        //   "url('https://4kwallpapers.com/images/walls/thumbs_2t/12523.jpg')",
-        // backgroundSize: "cover",
-        // backgroundPosition: "center",
-        // backgroundRepeat: "no-repeat",
-      }}
-    >
-      {/* Left Section */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          margin: "10px",
-          padding: "10px",
-          minHeight: "100vh", // Ensure it takes the full height of the viewport
-          width: "40vw", // Ensure it takes the full width of the viewport
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "34px",
-            padding: "10px",
-            margin: "20px",
-            textAlign: "center",
-            color: "black",
-          }}
-        >
+    <EventCreationWrapper>
+      <LeftSection>
+        <h1>
           Join us for an engaging event where innovation meets learning! Connect
           with experts, enhance your skills, and explore new trends in a dynamic
           setting. Don't miss this opportunity to grow and network!
         </h1>
-      </div>
+      </LeftSection>
 
-      {/* Right Section */}
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          margin: "10px",
-          gap: "15px",
-          padding: "20px",
-          height: "auto",
-          width: "100%",
-          maxWidth: "450px",
-          backgroundColor: "white",
-          borderRadius: "8px",
-          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <h1
-          className="text-center text-3xl my-7 font-semibold"
-          style={{
-            fontSize: "28px",
-            fontFamily: "sans-serif",
-            padding: "10px",
-            margin: "10px",
-            textAlign: "center",
-          }}
-        >
-          Create an Event
-        </h1>
-        <input
+      <FormWrapper onSubmit={handleSubmit}>
+        <h1>Create an Event</h1>
+
+        <Input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Event Name"
           required
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
         />
-        <input
+
+        <Input
           type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Event Description"
           required
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
         />
-        <input
+
+        <Input
           type="datetime-local"
           value={date}
           onChange={(e) => setDate(e.target.value)}
           required
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
         />
-        <input
+
+        <Input
           type="text"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           placeholder="Event Location"
           required
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
         />
-        <select
-          id="category"
-          value={category}
-          onChange={handleCategoryChange}
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
-        >
+
+        <Select value={category} onChange={handleCategoryChange}>
           <option value="all">All</option>
           <option value="workshop">Workshop</option>
           <option value="conference">Conference</option>
           <option value="webinar">Webinar</option>
-        </select>
-        <input
+        </Select>
+
+        <Input
           type="text"
           value={organizer}
           onChange={(e) => setOrganizer(e.target.value)}
           placeholder="Organizer Name"
           required
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
         />
-        <input
+
+        <Input
           type="number"
           value={maxAttendees}
           onChange={(e) => setMaxAttendees(e.target.value)}
           placeholder="Capacity"
           required
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
         />
-        <input
-          type="file"
-          onChange={handleFileChange}
-          style={{
-            padding: "10px",
-            fontSize: "16px",
-            borderRadius: "5px",
-            border: "1px solid #ccc",
-          }}
-        />
-        <button
-          type="submit"
-          style={{
-            padding: "10px 20px",
-            fontSize: "16px",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            borderRadius: "5px",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Create Event
-        </button>
-      </form>
 
-      {/* Attendee List Section */}
+        <FileInput type="file" onChange={handleFileChange} />
+
+        <SubmitButton type="submit">Create Event</SubmitButton>
+      </FormWrapper>
+
       {eventId && (
-        <div
-          style={{
-            marginTop: "20px",
-            padding: "10px",
-            backgroundColor: "#f0f0f0",
-            borderRadius: "8px",
-            textAlign: "center",
-          }}
-        >
+        <AttendeeListSection>
           <h2>Real-Time Attendee Count</h2>
           <p>
             {attendeesCount} / {maxAttendees} people have joined
           </p>
-        </div>
+        </AttendeeListSection>
       )}
-    </div>
+    </EventCreationWrapper>
   );
 };
 
 export default EventCreation;
+
+const EventCreationWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-wrap: wrap;
+  padding: 20px;
+  background-color: #f5f5f5;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    padding: 10px;
+  }
+`;
+
+const LeftSection = styled.div`
+  flex: 1;
+  min-width: 280px;
+  padding: 10px;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-right: 20px;
+
+  h1 {
+    font-size: 18px;
+    font-weight: 400;
+    color: #333;
+  }
+
+  @media (max-width: 768px) {
+    margin-right: 0;
+    margin-bottom: 20px;
+    h1 {
+      font-size: 16px;
+    }
+  }
+`;
+
+const FormWrapper = styled.form`
+  flex: 1;
+  max-width: 400px;
+  width: 90%;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  h1 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #333;
+  }
+
+  @media (max-width: 600px) {
+    padding: 10px;
+    max-width: 100%;
+  }
+`;
+
+const Input = styled.input`
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 12px;
+  width: 90%;
+`;
+
+const Select = styled.select`
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 12px;
+  width: 90%;
+`;
+
+const FileInput = styled.input`
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 12px;
+  width: 90%;
+`;
+
+const SubmitButton = styled.button`
+  padding: 12px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+
+  &:hover {
+    background-color: #45a049;
+  }
+`;
+
+const AttendeeListSection = styled.div`
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  text-align: center;
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 16px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+  }
+`;

@@ -34,10 +34,10 @@ export default function Header() {
   };
 
   return (
-    <HeaderWrapper>
-      <Link to="/" className="logo">
+    <HeaderContainer>
+      <LogoWrapper to="/" className="logo">
         <Logo>EVEnT_oR🌐👨🏻‍💻</Logo>
-      </Link>
+      </LogoWrapper>
 
       <SearchForm onSubmit={handleSubmit}>
         <SearchInput
@@ -80,12 +80,12 @@ export default function Header() {
           </Link>
         )}
       </RightSection>
-    </HeaderWrapper>
+    </HeaderContainer>
   );
 }
 
 // Styled Components
-const HeaderWrapper = styled.div`
+const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -93,18 +93,34 @@ const HeaderWrapper = styled.div`
   background-color: #fff;
   color: #000;
   border-bottom: 2px solid #ccc;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 15px 10px;
+  }
 `;
 
-const Logo = styled.span`
+const LogoWrapper = styled(Link)`
+  text-decoration: none;
+`;
+
+const Logo = styled.h1`
   font-size: 1.5rem;
   font-weight: bold;
   color: #4fd1c5;
   cursor: pointer;
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const SearchForm = styled.form`
   display: flex;
   align-items: center;
+  margin-left: 32px;
+  @media (max-width: 768px) {
+    margin-left: 0;
+    margin-top: 15px;
+  }
 `;
 
 const SearchInput = styled.input`
@@ -112,6 +128,10 @@ const SearchInput = styled.input`
   margin-right: 8px;
   border: 2px solid #ccc;
   border-radius: 4px;
+  width: 250px;
+  @media (max-width: 768px) {
+    width: 200px;
+  }
 `;
 
 const SearchButton = styled.button`
@@ -125,6 +145,10 @@ const SearchButton = styled.button`
 const NavLinks = styled.div`
   display: flex;
   gap: 24px;
+  @media (max-width: 768px) {
+    margin-top: 15px;
+    justify-content: center;
+  }
 `;
 
 const NavLink = styled(Link)`
@@ -140,6 +164,9 @@ const RightSection = styled.div`
   display: flex;
   gap: 16px;
   align-items: center;
+  @media (max-width: 768px) {
+    margin-top: 15px;
+  }
 `;
 
 const UserSection = styled.div`
@@ -172,12 +199,6 @@ const DropdownItem = styled.div`
   }
 `;
 
-const DropdownDivider = styled.div`
-  height: 1px;
-  background-color: #ccc;
-  margin: 5px 0;
-`;
-
 const SignInButton = styled.button`
   background-color: #4fd1c5;
   color: #fff;
@@ -185,4 +206,8 @@ const SignInButton = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 1rem;
+  &:hover {
+    background-color: #38b2ac;
+  }
 `;

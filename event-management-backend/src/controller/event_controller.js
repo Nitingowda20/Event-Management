@@ -5,7 +5,6 @@ import {
   getEventById,
   updateEvent,
   deleteEvent,
-  joinEventService,
   searchEvents,
 } from "../service/event_service.js";
 
@@ -96,14 +95,14 @@ export const deleteEventController = async (req, res) => {
 };
 
 // Join event controller
-export const joinEventController = async (req, res) => {
-  const { eventId } = req.params;
-  const userId = req.user.id; // Assuming user ID is available from authentication middleware
+// export const joinEventController = async (req, res) => {
+//   const { eventId } = req.params;
+//   const userId = req.user.id; // Assuming user ID is available from authentication middleware
 
-  try {
-    const updatedEvent = await joinEventService(eventId, userId);
-    res.status(200).json(updatedEvent);
-  } catch (error) {
-    res.status(500).json({ message: "Server Error: " + error.message });
-  }
-};
+//   try {
+//     const updatedEvent = await joinEventService(eventId, userId);
+//     res.status(200).json(updatedEvent);
+//   } catch (error) {
+//     res.status(500).json({ message: "Server Error: " + error.message });
+//   }
+// };

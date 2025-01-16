@@ -38,15 +38,6 @@ export const createEvent = async (eventData) => {
 };
 
 //  to get all events
-// export const getAllEvents = async () => {
-//   try {
-//     return await EventModel.find();
-//   } catch (error) {
-//     throw new Error("Error while fetching events: " + error.message);
-//   }
-// };
-// eventService.js
-
 export const getAllEvents = async () => {
   try {
     return await EventModel.find();
@@ -58,18 +49,13 @@ export const getAllEvents = async () => {
 export const searchEvents = async (searchTerm, category, sort) => {
   try {
     const query = {};
-
-    // Use text search if searchTerm is provided
     if (searchTerm) {
-      query.$text = { $search: searchTerm }; // Ensure text index is on the search fields (e.g., title, description)
+      query.$text = { $search: searchTerm };
     }
-
-    // Filter by category if provided
     if (category && category !== "all") {
       query.category = category;
     }
 
-    // Sort events based on createdAt field (ascending or descending)
     const sortOptions = sort === "asc" ? { createdAt: 1 } : { createdAt: -1 };
 
     return await EventModel.find(query).sort(sortOptions);
@@ -77,7 +63,6 @@ export const searchEvents = async (searchTerm, category, sort) => {
     throw new Error("Error while searching events: " + error.message);
   }
 };
-
 
 // to get an event by ID
 export const getEventById = async (eventId) => {

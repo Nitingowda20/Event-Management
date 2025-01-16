@@ -6,6 +6,7 @@ import event_route from "./route/event_route.js";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
+import EventModel from "./model/event_model.js";
 
 dotenv.config();
 const DB_URI = process.env.MONGO_URI;
@@ -13,34 +14,76 @@ const port = process.env.PORT || 1234;
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server); // Create socket.io server using the http server
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173", // Allow frontend origin
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 let eventAttendees = {};
 
-// Emit the initial number of attendees when someone joins the event
+// Listen for client connections
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log("A user connected");
 
-  socket.on("joinEvent", async (eventId) => {
-    // Get the initial number of attendees from the database
-    const event = await EventModel.findById(eventId);
-    eventAttendees[eventId] = event.attendees || 0;
+  // Emit an event to the client when they join an event
+  socket.on("joinEvent", (eventId) => {
+    console.log(`User joined event: ${eventId}`);
+    socket.join(eventId); // Join a specific room for the event
 
-    socket.emit("updateAttendees", eventAttendees[eventId]);
+    // Notify other users in the event room about the new join
+    io.to(eventId).emit("newAttendee", "A new attendee has joined!");
   });
 
-  // Listen for event updates, like new attendee
-  socket.on("attendeeJoined", (eventId) => {
-    eventAttendees[eventId] = (eventAttendees[eventId] || 0) + 1;
-    io.emit("updateAttendees", eventAttendees[eventId]); // Emit updated attendees count to all connected clients
-  });
+  // Handle other events
 
+  // Listen for client disconnect
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("A user disconnected");
   });
+});
+
+const updateAttendeeCount = async (eventId) => {
+  try {
+    // Find the event by ID
+    const event = await EventModel.findById(eventId);
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    // Check if there is space available for more attendees
+    if (event.attendees >= event.maxAttendees) {
+      throw new Error("Event is already full");
+    }
+
+    // Increment the attendee count
+    event.attendees += 1;
+
+    // Save the updated event
+    await event.save();
+
+    return event;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+// Route to handle joining an event and updating attendee count
+app.post("/api/events/:eventId/join", async (req, res) => {
+  const eventId = req.params.eventId;
+
+  // Assume you have a function `updateAttendeeCount` to increment the attendee count in your database
+  const updatedEvent = await updateAttendeeCount(eventId);
+
+  // Broadcast the updated attendee count to all clients in the event room
+  io.to(eventId).emit("attendeeUpdated", updatedEvent.attendees);
+
+  res.status(200).json(updatedEvent); // Return updated event data
 });
 
 mongoose
