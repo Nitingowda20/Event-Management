@@ -1,61 +1,153 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import EventCard from "../components/EventCard";
+import styled from "styled-components";
 
 export default function Dashboard() {
-  const API_URL = "http://localhost:1234/api/events";
+  const API_URL = "http://localhost:1234";
 
   const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchPost = async () => {
-      const res = await fetch(`${API_URL}/getallevent`);
-      const data = await res.json();
-      console.log("Fetched events:", data);
-      setEvents(data);
+      try {
+        const res = await fetch(`${API_URL}/api/events/getallevent`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch events");
+        }
+        const data = await res.json();
+        console.log("Fetched events:", data);
+        setEvents(data);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchPost();
   }, []);
+
+  if (loading) {
+    return <div>Loading events...</div>;
+  }
+
   return (
-    <div className=" w-full flex flex-col gap-6 p-28 px-3 max-w-7xl mx-auto">
-      <div className="text-3xl font-bold lg:text-6xl">
-        <p className="text-gray-500 text-xs sm:text-sm mt-5">
-          Here, you can explore a variety of upcoming and past events. As a
-          guest, you can view event details, but to fully interact with our
-          features, such as registering for events or participating in
-          discussions, please log in or sign up for an account. We encourage you
-          to join our community and take advantage of all the exciting
-          opportunities available!
-        </p>
-        <Link
-          to="/search"
-          className="text-xs sm:text-sm text-teal-500 font-bold hover:underline"
-        >
-          {" "}
-          View all Events
-        </Link>
-      </div>
-      <div className="min-w-full p-1 bg-amber-100 dark:bg-slate-700"></div>
-      <div className=" p-3 mx-auto flex flex-col gap-8 py-7">
+    <DashboardWrapper>
+      <Header>
+        <Title>
+          <p>
+            Here, you can explore a variety of upcoming and past events. As a
+            guest, you can view event details, but to fully interact with our
+            features, such as registering for events or participating in
+            discussions, please log in or sign up for an account. We encourage
+            you to join our community and take advantage of all the exciting
+            opportunities available!
+          </p>
+        </Title>
+        <LinkText to="/search">View all Events</LinkText>
+      </Header>
+
+      <Divider />
+
+      <EventsSection>
         {events && events.length > 0 && (
-          <div className="flex flex-col gap-6">
-            <h2 className="text-2xl font-semibold text-center">
-              Recent Events
-            </h2>
-            <div className="flex flex-wrap gap-3">
+          <EventsGrid>
+            <h2>Recent Events</h2>
+            <Grid>
               {events.map((event) => (
-                // console.log("posts");
                 <EventCard key={event._id} event={event} />
               ))}
-            </div>
-          </div>
+            </Grid>
+          </EventsGrid>
         )}
-      </div>
-      <Link
-        to="/search"
-        className="text-center text-xl hover:underline text-teal-500"
-      >
-        View all Events
-      </Link>
-    </div>
+      </EventsSection>
+
+      <LinkText to="/search">View all Events</LinkText>
+    </DashboardWrapper>
   );
 }
+
+const DashboardWrapper = styled.div`
+  width: 100%;
+  padding: 28px 3px;
+  max-width: 7xl;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+const Header = styled.div`
+  text-align: center;
+  font-size: 3xl;
+  font-weight: bold;
+  @media (min-width: 1024px) {
+    font-size: 6xl;
+  }
+`;
+
+const Title = styled.div`
+  color: #4a5568;
+  font-size: 1rem;
+  margin-top: 5px;
+  padding: 12px;
+  @media (min-width: 640px) {
+    font-size: 1.25rem;
+  }
+`;
+
+const LinkText = styled(Link)`
+  text-align: center;
+  color: #4fd1c5;
+  font-weight: bold;
+  font-size: 1rem;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Divider = styled.div`
+  min-width: 100%;
+  padding: 1px;
+  background-color: #ffbf00;
+  @media (prefers-color-scheme: dark) {
+    background-color: #2d3748;
+  }
+`;
+
+const EventsSection = styled.div`
+  padding: 15px 3px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 1rem;
+`;
+
+const EventsGrid = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+  h2 {
+    font-size: 2xl;
+    font-weight: 600;
+  }
+`;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 24px;
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+`;

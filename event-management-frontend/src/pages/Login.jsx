@@ -25,11 +25,14 @@ const Login = () => {
       });
 
       if (response.status === 200) {
-        // Save token in localStorage
-        localStorage.setItem("token", response.data.token);
-
-        // Navigate to event dashboard after successful login
-        navigate("/dashboard");
+        localStorage.setItem(
+          "currentUser",
+          JSON.stringify({
+            token: response.data.token,
+            username: response.data.user.username,
+          })
+        );
+        navigate("/");
       }
     } catch (error) {
       setError(
@@ -37,20 +40,22 @@ const Login = () => {
       );
     }
   };
+
   const handleGuestLogin = async () => {
     try {
       const response = await axios.post(`${API_URL}/guest-login`);
       const { token } = response.data;
-      localStorage.setItem("token", token);
-      navigate("/guest-dashboard");
+      localStorage.setItem("currentUser", JSON.stringify({ token }));
+      navigate("/");
     } catch (error) {
       console.error("Guest login failed", error);
     }
   };
+
   return (
     <div style={styles.container}>
       <div style={styles.formContainer}>
-        <h2 style={styles.header}>Login </h2>
+        <h2 style={styles.header}>Login</h2>
         {error && <p style={styles.error}>{error}</p>}
         <form onSubmit={handleSubmit}>
           <div style={styles.formGroup}>
@@ -76,7 +81,13 @@ const Login = () => {
           <button type="submit" style={styles.button}>
             Login
           </button>
-          <button onClick={handleGuestLogin}>Login as Guest</button>
+          <button
+            type="button"
+            onClick={handleGuestLogin}
+            style={styles.button}
+          >
+            Login as Guest
+          </button>
         </form>
         <p style={styles.registerText}>
           Don't have an account?{" "}
@@ -94,8 +105,8 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    minHeight: "100vh", // Ensure it takes the full height of the viewport
-    width: "100vw", // Ensure it takes the full width of the viewport
+    minHeight: "100vh",
+    width:"100vw",
     backgroundColor: "#f0f0f0",
   },
   formContainer: {
@@ -103,8 +114,8 @@ const styles = {
     flexDirection: "column",
     gap: "15px",
     padding: "20px",
-    width: "100%",
     maxWidth: "350px",
+    width:"100%",
     backgroundColor: "white",
     borderRadius: "8px",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
@@ -121,7 +132,7 @@ const styles = {
   input: {
     padding: "8px",
     fontSize: "16px",
-    width: "95%",
+    width: "90%",
     border: "1px solid #ccc",
     borderRadius: "5px",
   },
@@ -132,17 +143,8 @@ const styles = {
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
-    width: "100%",
-  },
-  buttonView: {
-    padding: "10px",
-    marginTop: "10px",
-    backgroundColor: "blue",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    width: "100%",
+    width: "90%",
+    margin:"10px"
   },
   error: {
     color: "red",

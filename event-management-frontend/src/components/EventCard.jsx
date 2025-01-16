@@ -1,13 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function EventCard({ event }) {
+const navigate = useNavigate();
+
+const handleClick = () => {
+  // Navigate to the event details page with the event ID
+  navigate(`/event/${event._id}`);
+};
+
   return (
     <Card>
       <Link to={`/event/${event._id}`}>
         <EventImage
-          src={event.image || "default-image-url"} // Default image URL if the event does not have an image
+          src={event.image || "default-image-url"}
           alt="event cover"
         />
       </Link>
@@ -19,11 +26,10 @@ export default function EventCard({ event }) {
   );
 }
 
-// Styled Components for basic styling
 const Card = styled.div`
   position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: 350px;
   border: 2px solid #4fd1c5;
   border-radius: 8px;
   overflow: hidden;
@@ -34,7 +40,6 @@ const Card = styled.div`
 `;
 
 const EventImage = styled.img`
-  positon : fixed;
   width: 100%;
   height: 300px;
   object-fit: cover;

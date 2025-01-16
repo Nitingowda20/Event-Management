@@ -38,6 +38,15 @@ export const createEvent = async (eventData) => {
 };
 
 //  to get all events
+// export const getAllEvents = async () => {
+//   try {
+//     return await EventModel.find();
+//   } catch (error) {
+//     throw new Error("Error while fetching events: " + error.message);
+//   }
+// };
+// eventService.js
+
 export const getAllEvents = async () => {
   try {
     return await EventModel.find();
@@ -45,6 +54,30 @@ export const getAllEvents = async () => {
     throw new Error("Error while fetching events: " + error.message);
   }
 };
+
+export const searchEvents = async (searchTerm, category, sort) => {
+  try {
+    const query = {};
+
+    // Use text search if searchTerm is provided
+    if (searchTerm) {
+      query.$text = { $search: searchTerm }; // Ensure text index is on the search fields (e.g., title, description)
+    }
+
+    // Filter by category if provided
+    if (category && category !== "all") {
+      query.category = category;
+    }
+
+    // Sort events based on createdAt field (ascending or descending)
+    const sortOptions = sort === "asc" ? { createdAt: 1 } : { createdAt: -1 };
+
+    return await EventModel.find(query).sort(sortOptions);
+  } catch (error) {
+    throw new Error("Error while searching events: " + error.message);
+  }
+};
+
 
 // to get an event by ID
 export const getEventById = async (eventId) => {
@@ -72,5 +105,30 @@ export const deleteEvent = async (eventId) => {
     return { message: "Event deleted successfully" };
   } catch (error) {
     throw new Error("Error while deleting event: " + error.message);
+  }
+};
+
+// Join event service
+export const joinEventService = async (eventId, userId) => {
+  try {
+    const event = await EventModel.findById(eventId);
+
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    // Check if the user is already a participant
+    if (event.participants.includes(userId)) {
+      throw new Error("User already joined this event");
+    }
+
+    // Add the user to the event's participants list
+    event.participants.push(userId);
+
+    await event.save();
+
+    return event;
+  } catch (error) {
+    throw new Error("Error while joining event: " + error.message);
   }
 };
